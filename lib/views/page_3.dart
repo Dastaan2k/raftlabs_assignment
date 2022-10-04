@@ -127,16 +127,18 @@ class _GeoLocationWidgetState extends State<GeoLocationWidget> {
     setState(() { isLoading = true; });
     var status = await Geolocator.requestPermission();
     if(status == LocationPermission.denied) {
+      setState(() { isLoading = false; });
       Fluttertoast.showToast(msg: 'Location permission denied');
     }
     else if(status == LocationPermission.deniedForever) {
       Fluttertoast.showToast(msg: 'Location permission disabled, enable it from app settings');
-      await Geolocator.openLocationSettings();
+      await Geolocator.openAppSettings();
+      setState(() { isLoading = false; });
     }
     else if(status == LocationPermission.always || status == LocationPermission.whileInUse){
       Get.put(GeoLocatorController()).myPos.value = await Geolocator.getCurrentPosition();
     }
-    setState(() { isLoading = true; });
+    setState(() { isLoading = false; });
 
   }
 
